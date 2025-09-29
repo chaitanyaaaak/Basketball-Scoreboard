@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basketball Scoreboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <style>
+        /* General Body and Layout Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1B244A;
+            color: #EEEEEE;
+            display: flex;
+            flex-direction: column; /* Allow heading to stack */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .main-heading {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+
+        main.scoreboard {
+            background-color: #1F2937;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 42rem;
+            /* Using CSS Grid - mobile first (single column) */
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem; /* Increased gap for better vertical spacing */
+            justify-items: center;
+        }
+        
+        /* Media query for tablets and desktops */
+        @media (min-width: 640px) {
+            main.scoreboard {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .team-title {
+            font-size: 2rem; /* Smaller font for mobile */
+            font-weight: 700;
+            color: #EEEEEE;
+        }
+        
+        @media (min-width: 640px) {
+            .team-title {
+                 font-size: 2.5rem; /* Larger font for desktop */
+            }
+        }
+
+
+        /* Score Display Styles */
+        .score-display {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #080001;
+            color: #F94F6D;
+            font-size: 4rem; /* Smaller font for mobile */
+            line-height: 1;
+            padding: 1.5rem 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            min-width: 120px;
+            width: 100%;
+            max-width: 200px;
+            text-shadow: 0 0 10px #F94F6D, 0 0 20px #F94F6D, 0 0 30px #F94F6D;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        @media (min-width: 640px) {
+            .score-display {
+                font-size: 5rem;
+                padding: 2rem 1.5rem;
+                min-width: 150px;
+            }
+        }
+
+        .score-display.leader {
+             box-shadow: 0 0 25px #fbbf24; /* Yellow glow for the leader */
+        }
+
+        /* Button Styles */
+        .score-buttons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .score-btn {
+            background-color: transparent;
+            border: 2px solid #9AABD8;
+            color: #9AABD8;
+            transition: all 0.2s ease;
+            width: 2.5rem; /* 40px */
+            height: 2.5rem; /* 40px */
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .score-btn:hover {
+            background-color: #9AABD8;
+            color: #1B244A;
+        }
+
+        /* Foul & Period Styles */
+        .stat-container {
+            margin-top: 1rem;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #9AABD8;
+        }
+        .stat-value {
+            color: #fff;
+            font-weight: 700;
+            min-width: 20px;
+            text-align: center;
+        }
+        .stat-btn {
+            background: #4A4E69;
+            border: none;
+            color: #fff;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+        }
+        .stat-btn:hover {
+            background: #6A6E89;
+        }
+        
+        .game-controls {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .period-tracker {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .new-game-btn {
+            background-color: #EF4444;
+            color: white;
+            transition: background-color 0.2s ease;
+            font-weight: 700;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .new-game-btn:hover {
+            background-color: #DC2626;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="main-heading">Basketball Scoreboard</h1>
+    <main class="scoreboard">
+        <!-- Home Team Section -->
+        <div class="team">
+            <h2 class="team-title">HOME</h2>
+            <div id="home-score" class="score-display">0</div>
+            <div class="score-buttons">
+                <button class="score-btn" onclick="addScore('home', 1)">+1</button>
+                <button class="score-btn" onclick="addScore('home', 2)">+2</button>
+                <button class="score-btn" onclick="addScore('home', 3)">+3</button>
+            </div>
+            <div class="stat-container">
+                <span>FOULS:</span>
+                <span id="home-fouls" class="stat-value">0</span>
+                <button class="stat-btn" onclick="addFoul('home')">+</button>
+            </div>
+        </div>
+
+        <!-- Guest Team Section -->
+        <div class="team">
+            <h2 class="team-title">GUEST</h2>
+            <div id="guest-score" class="score-display">0</div>
+            <div class="score-buttons">
+                <button class="score-btn" onclick="addScore('guest', 1)">+1</button>
+                <button class="score-btn" onclick="addScore('guest', 2)">+2</button>
+                <button class="score-btn" onclick="addScore('guest', 3)">+3</button>
+            </div>
+             <div class="stat-container">
+                <span>FOULS:</span>
+                <span id="guest-fouls" class="stat-value">0</span>
+                <button class="stat-btn" onclick="addFoul('guest')">+</button>
+            </div>
+        </div>
+
+        <!-- Game Controls Section -->
+        <div class="game-controls">
+            <div class="period-tracker stat-container">
+                <button id="prev-period-btn" class="stat-btn">-</button>
+                <span>PERIOD: <span id="period-display" class="stat-value">1</span></span>
+                <button id="next-period-btn" class="stat-btn">+</button>
+            </div>
+            <button id="new-game-btn" class="new-game-btn">New Game</button>
+        </div>
+    </main>
+
+    <script>
+        // Get score elements from the DOM
+        const homeScoreEl = document.getElementById('home-score');
+        const guestScoreEl = document.getElementById('guest-score');
+        const homeFoulsEl = document.getElementById('home-fouls');
+        const guestFoulsEl = document.getElementById('guest-fouls');
+        const periodDisplayEl = document.getElementById('period-display');
+        
+        // Buttons
+        const newGameBtn = document.getElementById('new-game-btn');
+        const prevPeriodBtn = document.getElementById('prev-period-btn');
+        const nextPeriodBtn = document.getElementById('next-period-btn');
+
+        // Initialize scores and stats
+        let homeScore = 0;
+        let guestScore = 0;
+        let homeFouls = 0;
+        let guestFouls = 0;
+        let period = 1;
+
+        /**
+         * Adds points to the specified team's score.
+         * @param {string} team - The team to add score to ('home' or 'guest').
+         * @param {number} points - The number of points to add.
+         */
+        function addScore(team, points) {
+            if (team === 'home') {
+                homeScore += points;
+                homeScoreEl.textContent = homeScore;
+            } else if (team === 'guest') {
+                guestScore += points;
+                guestScoreEl.textContent = guestScore;
+            }
+            highlightLeader();
+        }
+
+        /**
+         * Adds a foul to the specified team.
+         * @param {string} team - The team to add a foul to ('home' or 'guest').
+         */
+        function addFoul(team) {
+            if (team === 'home') {
+                homeFouls++;
+                homeFoulsEl.textContent = homeFouls;
+            } else {
+                guestFouls++;
+                guestFoulsEl.textContent = guestFouls;
+            }
+        }
+
+        /**
+         * Highlights the score of the leading team.
+         */
+        function highlightLeader() {
+            homeScoreEl.classList.remove('leader');
+            guestScoreEl.classList.remove('leader');
+
+            if (homeScore > guestScore) {
+                homeScoreEl.classList.add('leader');
+            } else if (guestScore > homeScore) {
+                guestScoreEl.classList.add('leader');
+            }
+        }
+        
+        /**
+         * Updates the period display.
+         */
+        function updatePeriod() {
+            periodDisplayEl.textContent = period;
+        }
+
+        /**
+         * Resets all scores and stats to 0.
+         */
+        function newGame() {
+            homeScore = 0;
+            guestScore = 0;
+            homeFouls = 0;
+            guestFouls = 0;
+            period = 1;
+            
+            homeScoreEl.textContent = 0;
+            guestScoreEl.textContent = 0;
+            homeFoulsEl.textContent = 0;
+            guestFoulsEl.textContent = 0;
+            updatePeriod();
+            highlightLeader();
+        }
+
+        // Add event listeners for buttons
+        newGameBtn.addEventListener('click', newGame);
+        
+        nextPeriodBtn.addEventListener('click', () => {
+            period++;
+            updatePeriod();
+        });
+        
+        prevPeriodBtn.addEventListener('click', () => {
+            if (period > 1) { // Period cannot be less than 1
+                period--;
+                updatePeriod();
+            }
+        });
+
+        // Initial call to set highlights if needed
+        highlightLeader();
+    </script>
+
+</body>
+</html>
+
