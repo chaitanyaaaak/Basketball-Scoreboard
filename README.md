@@ -9,7 +9,7 @@ A simple web-based basketball scoreboard to track **points** and **fouls** for h
 - Responsive and clean **user interface**
 
 ## Demo
-Check out the live demo [here](basketballscoreboardv2.netlify.app)
+Check out the live demo [here](https://basketballscoreboardv2.netlify.app/)
 
 ## Tech Stack
 - HTML
