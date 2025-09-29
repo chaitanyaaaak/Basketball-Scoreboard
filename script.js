@@ -15,6 +15,17 @@ function addScore(team, points) {
         homeScore.textContent = homeScoreVal;
     } else if (team === 'guest') {  
         guestScoreVal += points;
+        guestScore.textContent = guestScoreVal;
+    }
+}
+
+function addFoul(team) {
+    if (team === 'home') {
+        homeFoulsVal += 1;
+        homeFouls.textContent = homeFoulsVal;
+    } else if (team === 'guest') {
+        guestFoulsVal += 1;
+        guestFouls.textContent = guestFoulsVal;
     }
 }
 
