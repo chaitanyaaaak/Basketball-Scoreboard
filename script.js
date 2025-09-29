@@ -29,3 +29,14 @@ function addFoul(team) {
     }
 }
 
+function highlightLeader() {
+    homeScore.classList.remove('leader');
+    guestScore.classList.remove('leader');
+
+    if (homeScoreVal > guestScoreVal) {
+        homeScore.classList.add('leader');
+    }   else if (guestScoreVal > homeScoreVal) {
+        guestScore.classList.add('leader');
+    }
+}
+
