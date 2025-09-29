@@ -55,3 +55,5 @@ function resetGame() {
 
     highlightLeader();
 }
+
+newGameBtn.addEventListener('click', resetGame);
