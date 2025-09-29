@@ -17,6 +17,7 @@ function addScore(team, points) {
         guestScoreVal += points;
         guestScore.textContent = guestScoreVal;
     }
+    highlightLeader();
 }
 
 function addFoul(team) {
@@ -27,6 +28,7 @@ function addFoul(team) {
         guestFoulsVal += 1;
         guestFouls.textContent = guestFoulsVal;
     }
+    highlightLeader();
 }
 
 function highlightLeader() {
@@ -40,3 +42,16 @@ function highlightLeader() {
     }
 }
 
+function resetGame() {
+    homeScoreVal = 0;
+    guestScoreVal = 0;
+    homeFoulsVal = 0;
+    guestFoulsVal = 0;
+
+    homeScore.textContent = homeScoreVal;
+    guestScore.textContent = guestScoreVal;
+    homeFouls.textContent = homeFoulsVal;
+    guestFouls.textContent = guestFoulsVal;
+
+    highlightLeader();
+}
