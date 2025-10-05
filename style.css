@@ -62,7 +62,7 @@ main.scoreboard {
     min-width: 120px;
     width: 100%;
     max-width: 200px;
-    text-shadow: 0 0 10px #F94F6D, 0 0 20px #F94F6D, 0 0 30px #F94F6D;
+    text-shadow: 0 0 10px #F94F6D;
     transition: box-shadow 0.3s ease-in-out; 
 }
 
